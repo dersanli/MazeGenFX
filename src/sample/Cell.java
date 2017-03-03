@@ -1,6 +1,7 @@
 package sample;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * Created by dersanli on 3/3/17.
@@ -11,6 +12,7 @@ class Cell {
 
     Boolean[] walls = new Boolean[4];
     Boolean visited = Boolean.FALSE;
+    LinkedList<Cell> neighbors = new LinkedList<>();
 
     Cell(int i, int j)
     {
@@ -21,8 +23,4 @@ class Cell {
         //walls[0] = walls[1] = walls[2] = Boolean.FALSE;
     }
 
-    void checkNeighbors()
-    {
-
-    }
 }

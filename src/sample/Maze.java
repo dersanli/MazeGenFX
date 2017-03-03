@@ -20,6 +20,8 @@ class Maze {
     private LinkedList<Cell> grid = new LinkedList<>();
     private Cell current;
 
+    Cell[][] cells;
+
 
     Maze(GraphicsContext gc){
         this.gc = gc;
@@ -40,9 +42,14 @@ class Maze {
 
         cols = width/w; rows = height/w;
 
+        cells = new Cell[cols][rows];
+
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < cols; i++) {
                 Cell cell = new Cell (i, j);
+
+                cells[j][i] = cell;
+
                 grid.add(cell);
             }
         }
@@ -56,16 +63,41 @@ class Maze {
 
     private int index(int i, int j)
     {
+        if( i < 0 || j < 0 || i > cols - 1 || j > rows - 1 ){
+            return -1;
+        }
+
         return i + j * cols;
     }
 
     private void checkNeighbors(Cell current)
     {
-        Cell[] neighbors = new Cell[4];
-        Cell top = grid.get(index(current.i, current.j-1));
-        Cell right = grid.get(index(current.i+1, current.j));
-        Cell bottom = grid.get(index(current.i, current.j+1));
-        Cell left = grid.get(index(current.i-1, current.j));
+        //LinkedList<Cell> neighbors = new LinkedList<>();
+
+//        int index = index(current.i, current.j-1);
+//
+//        if(-1 != index)
+//        {
+//            if(!grid.get(index).visited) {
+//
+//            }
+//        }
+
+//        Cell top = grid.get(index(current.i, current.j-1));
+//        Cell right = grid.get(index(current.i+1, current.j));
+//        Cell bottom = grid.get(index(current.i, current.j+1));
+//        Cell left = grid.get(index(current.i-1, current.j));
+//
+//        if(!top.visited)
+//            current.neighbors.push(top);
+//        if(!left.visited)
+//            current.neighbors.push(left);
+//        if(!bottom.visited)
+//            current.neighbors.push(bottom);
+//        if(!right.visited)
+//            current.neighbors.push(right);
+
+
 
     }
 
