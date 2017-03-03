@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.Bloom?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane alignment="center" hgap="10" styleClass="root" vgap="10" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <stylesheets>
+      <URL value="@Login.css" />
+   </stylesheets>
+   <columnConstraints>
+      <ColumnConstraints />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+      <RowConstraints />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" />
+   </rowConstraints>
+      <Label fx:id="MessageLabel" text="Label" GridPane.rowIndex="0" />
+   <Button mnemonicParsing="false" onAction="#Button_Clicked" text="Push It" GridPane.rowIndex="2" />
+
+      <Canvas id="MazeCanvas" fx:id="MazeCanvas" height="200.0" onMouseClicked="#Mouse_Clicked" width="200.0" GridPane.rowIndex="1">
+      <cursor>
+         <Cursor fx:constant="HAND" />
+      </cursor>
+      <effect>
+         <Bloom />
+      </effect></Canvas>
+
+</GridPane>
