@@ -12,7 +12,7 @@ public class Controller {
     @FXML public void initialize()
     {
 
-        Maze m = new Maze(MazeCanvas.getGraphicsContext2D());
+        new Maze(MazeCanvas.getGraphicsContext2D());
 
     }
 
