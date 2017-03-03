@@ -9,18 +9,17 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 class Maze {
 
+    Cell[][] cells;
     private GraphicsContext gc;
     private Canvas canvas;
-
     private int width, height, cols, rows, w;
-
+    private LinkedList<Cell> stack = new LinkedList<>();
     private LinkedList<Cell> grid = new LinkedList<>();
     private Cell current;
-
-    Cell[][] cells;
 
 
     Maze(GraphicsContext gc){
@@ -28,11 +27,19 @@ class Maze {
         this.canvas = gc.getCanvas();
 
         Initialize();
-        DrawCells();
+
+        do {
+            DrawCells();
+        } while (stack.size() > 0);
+
     }
 
     private void Initialize()
     {
+        gc.setFill(Color.PURPLE);
+        gc.setStroke(Color.BEIGE);
+        gc.setLineWidth(2);
+
         canvas.setWidth(400);
         canvas.setHeight(400);
 
@@ -42,24 +49,21 @@ class Maze {
 
         cols = width/w; rows = height/w;
 
-        cells = new Cell[cols][rows];
+        //cells = new Cell[cols][rows];
 
         for (int j = 0; j < rows; j++) {
             for (int i = 0; i < cols; i++) {
                 Cell cell = new Cell (i, j);
 
-                cells[j][i] = cell;
+                //cells[j][i] = cell;
 
                 grid.add(cell);
             }
         }
 
         current = grid.get(0);
-        current.visited = Boolean.TRUE;
-        checkNeighbors(current);
-
-
     }
+
 
     private int index(int i, int j)
     {
@@ -70,43 +74,48 @@ class Maze {
         return i + j * cols;
     }
 
-    private void checkNeighbors(Cell current)
-    {
-        //LinkedList<Cell> neighbors = new LinkedList<>();
+    private Cell checkNeighbors(Cell current) {
+        LinkedList<Cell> neighbors = new LinkedList<>();
 
-//        int index = index(current.i, current.j-1);
-//
-//        if(-1 != index)
-//        {
-//            if(!grid.get(index).visited) {
-//
-//            }
-//        }
+        int index = index(current.i, current.j - 1);
 
-//        Cell top = grid.get(index(current.i, current.j-1));
-//        Cell right = grid.get(index(current.i+1, current.j));
-//        Cell bottom = grid.get(index(current.i, current.j+1));
-//        Cell left = grid.get(index(current.i-1, current.j));
-//
-//        if(!top.visited)
-//            current.neighbors.push(top);
-//        if(!left.visited)
-//            current.neighbors.push(left);
-//        if(!bottom.visited)
-//            current.neighbors.push(bottom);
-//        if(!right.visited)
-//            current.neighbors.push(right);
+        if (-1 != index) {
+            if (!grid.get(index).visited) {
+                neighbors.push(grid.get(index));
+            }
+        }
 
+        index = index(current.i + 1, current.j);
+        if (-1 != index) {
+            if (!grid.get(index).visited) {
+                neighbors.push(grid.get(index));
+            }
+        }
 
+        index = index(current.i, current.j + 1);
+        if (-1 != index) {
+            if (!grid.get(index).visited) {
+                neighbors.push(grid.get(index));
+            }
+        }
 
+        index = index(current.i - 1, current.j);
+        if (-1 != index) {
+            if (!grid.get(index).visited) {
+                neighbors.push(grid.get(index));
+            }
+        }
+
+        if (neighbors.size() > 0) {
+            int r = new Random().nextInt(neighbors.size()); //floor(random(0, neighbors.length));
+            return neighbors.get(r);
+        } else {
+            return null;
+        }
     }
 
     private void DrawCells()
     {
-        gc.setFill(Color.PURPLE);
-        gc.setStroke(Color.BEIGE);
-        gc.setLineWidth(2);
-
         for (int i = 0; i < grid.size() ; i++) {
 
             Cell cell = grid.get(i);
@@ -126,32 +135,54 @@ class Maze {
             if(cell.walls[3]) {
                 gc.strokeLine(x, y + w, x, y); //left
             }
-
-            if(cell.visited)
-            {
-                gc.fillRect(x,y,w,w);
-            }
-
-            //System.out.printf("%d : %d\n",x,y);
-
         }
 
+        current.visited = true;
+        gc.fillRect(current.i * w, current.j * w, w, w);
 
+//        try {
+//            Thread.sleep(500);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
+        // STEP 1
+        Cell next = checkNeighbors(current);
+        if (next != null) {
+            next.visited = true;
 
+            // STEP 2
+            stack.push(current);
 
+            // STEP 3
+            removeWalls(current, next);
 
+            // STEP 4
+            current = next;
+        } else if (stack.size() > 0) {
+            current = stack.pop();
+        }
 
+        //System.out.printf("%d : %d\n",x,y);
     }
 
-
-
-    void PaintCanvas()
+    void removeWalls(Cell a, Cell b)
     {
-        //gc.setFill(Color.CHOCOLATE);
-
-        //gc.fillRect(0,0,canvas.getWidth(),canvas.getHeight());
-
+        int x = a.i - b.i;
+        if (x == 1) {
+            a.walls[3] = false;
+            b.walls[1] = false;
+        } else if (x == -1) {
+            a.walls[1] = false;
+            b.walls[3] = false;
+        }
+        int y = a.j - b.j;
+        if (y == 1) {
+            a.walls[0] = false;
+            b.walls[2] = false;
+        } else if (y == -1) {
+            a.walls[2] = false;
+            b.walls[0] = false;
+        }
     }
-
 }

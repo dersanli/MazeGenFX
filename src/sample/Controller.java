@@ -14,10 +14,6 @@ public class Controller {
 
         Maze m = new Maze(MazeCanvas.getGraphicsContext2D());
 
-        m.PaintCanvas();
-
-
-
     }
 
     @FXML protected void Mouse_Clicked() {
